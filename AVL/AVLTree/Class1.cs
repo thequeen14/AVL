@@ -78,9 +78,11 @@ namespace AVLTree
             }
         }
 
-        private void BalanceTree()
+        private void BalanceTree(Node<TKey, TValue> currentNode)
         {
-            
+            int balanceFactor = CheckBalanceFactor(currentNode);
+
+
         }
 
         private int CheckBalanceFactor(Node<TKey, TValue> currentNode)
@@ -112,17 +114,24 @@ namespace AVLTree
 
         private void BigLeftRotation(Node<TKey, TValue> currentNode)
         {
-            
+            SmallRightRotation(currentNode.Right);
+            SmallLeftRotation(currentNode);
         }
 
         private void SmallRightRotation(Node<TKey, TValue> currentNode)
         {
-            
+            Node<TKey, TValue> tempNode = currentNode.Left;
+            currentNode.Left = tempNode.Right;
+            tempNode.Right = currentNode;
+            tempNode.Parent = currentNode.Parent;
+            currentNode.Parent = tempNode;
+            currentNode.Left.Parent = currentNode;
         }
 
         private void BigRightRotation(Node<TKey, TValue> currentNode)
         {
-            
+            SmallLeftRotation(currentNode.Left);
+            SmallRightRotation(currentNode);
         }
     }
 }
