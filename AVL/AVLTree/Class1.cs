@@ -75,14 +75,50 @@ namespace AVLTree
                 }
                 node.Parent = parent;
                 Count++;
+
+                while (NodeNeeedsBalancing(_root))
+                {
+                    BalanceTree(FindPivotToBalance(node));
+                }
             }
+        }
+
+        private bool NodeNeeedsBalancing(Node<TKey, TValue> currentNode)
+        {
+            if (CheckBalanceFactor(currentNode) == 0 || CheckBalanceFactor(currentNode) == 1 || CheckBalanceFactor(currentNode) == -1)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private Node<TKey, TValue> FindPivotToBalance(Node<TKey, TValue> currentNode)
+        {
+            Node<TKey, TValue> findPivot = _root;
+            while (NodeNeeedsBalancing(findPivot))
+            {
+                if (currentNode.Key.CompareTo(_root.Key) > 0)
+                {
+                    findPivot = findPivot.Right;
+                }
+                else
+                {
+                    findPivot = findPivot.Left;
+                }
+            }
+            return findPivot.Parent;
         }
 
         private void BalanceTree(Node<TKey, TValue> currentNode)
         {
             int balanceFactor = CheckBalanceFactor(currentNode);
-
-
+            if (balanceFactor > 1)
+            {
+                
+            }
         }
 
         private int CheckBalanceFactor(Node<TKey, TValue> currentNode)
@@ -100,6 +136,45 @@ namespace AVLTree
             }
 
             return height;
+        }
+
+        public bool Contains(TKey key)
+        {
+            if (Find(key, _root) != null)
+            {
+                return true;
+            }
+                return false;
+        }
+
+        private Node<TKey, TValue> Find(TKey key, Node<TKey, TValue> currentNode)
+        {
+            if (currentNode.Key.CompareTo(key) == 0)
+            {
+                return currentNode;
+            }
+            if (currentNode.Key.CompareTo(key) > 0)
+            {
+                if (currentNode.Left != null)
+                {
+                    return Find(key, currentNode.Left);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                if (currentNode.Right != null)
+                {
+                    return Find(key, currentNode.Right);
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         private void SmallLeftRotation(Node<TKey, TValue> currentNode)
